@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+require("./src/workers/movie.worker");
 dotenv.config();
 
 const connectDB = require("./src/config/database");

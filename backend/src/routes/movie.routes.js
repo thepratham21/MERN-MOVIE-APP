@@ -2,6 +2,9 @@ const express = require("express");
 const Movie = require("../models/Movie");
 const auth = require("../middleware/auth.middleware");
 const role = require("../middleware/role.middleware");
+const { fetchTopMoviesFromTMDB } = require("../services/tmdb.service");
+const movieQueue = require("../queue/movie.queue");
+
 
 const router = express.Router();
 
@@ -121,6 +124,25 @@ router.delete("/:id", auth, role("admin"), async (req, res) => {
         res.json({ message: "Movie deleted successfully" });
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+});
+
+
+// Admin only route ---> to import movies from IMDb top 250
+router.post("/import/imdb", auth, role("admin"), async (req, res) => {
+    try {
+        const movies = await fetchTopMoviesFromTMDB();
+
+        for (const movie of movies) {
+            await movieQueue.add("import-movie", movie);
+        }
+
+        res.json({
+            message: "TMDB movies queued for import",
+            total: movies.length
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
