@@ -90,6 +90,43 @@ router.get("/sorted", async (req, res) => {
     }
 });
 
+// Admin only route ---> to update a movie
+router.put("/:id", auth, role("admin"), async (req, res) => {
+    try {
+        const updatedMovie = await Movie.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedMovie) {
+            return res.status(404).json({ message: "Movie not found" });
+        }
+
+        res.json(updatedMovie);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// Admin only route ---> to delete a movie
+router.delete("/:id", auth, role("admin"), async (req, res) => {
+    try {
+        const movie = await Movie.findByIdAndDelete(req.params.id);
+
+        if (!movie) {
+            return res.status(404).json({ message: "Movie not found" });
+        }
+
+        res.json({ message: "Movie deleted successfully" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
+
+
 
 
 module.exports = router;
