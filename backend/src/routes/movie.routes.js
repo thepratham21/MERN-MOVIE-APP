@@ -40,4 +40,56 @@ router.post("/", auth, role("admin"), async (req, res) => {
     }
 });
 
+// search movies by title or description --->
+router.get("/search", async (req, res) => {
+    try {
+        const q = req.query.q;
+
+        if (!q) {
+            return res.status(400).json({ message: "Search query required" });
+        }
+
+        const movies = await Movie.find({
+            $or: [
+                { title: { $regex: q, $options: "i" } },
+                { description: { $regex: q, $options: "i" } }
+            ]
+        });
+
+        res.json(movies);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// sorted movies by fields --->
+router.get("/sorted", async (req, res) => {
+    try {
+        const { by = "title", order = "asc" } = req.query;
+
+        const allowedFields = {
+            name: "title",
+            rating: "rating",
+            releaseDate: "releaseDate",
+            duration: "duration"
+        };
+
+        if (!allowedFields[by]) {
+            return res.status(400).json({ message: "Invalid sort field" });
+        }
+
+        const sortOrder = order === "desc" ? -1 : 1;
+
+        const movies = await Movie.find().sort({
+            [allowedFields[by]]: sortOrder
+        });
+
+        res.json(movies);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+
 module.exports = router;
