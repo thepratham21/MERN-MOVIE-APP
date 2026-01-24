@@ -131,6 +131,13 @@ router.delete("/:id", auth, role("admin"), async (req, res) => {
 // Admin only route ---> to import movies from IMDb top 250
 router.post("/import/imdb", auth, role("admin"), async (req, res) => {
     try {
+        
+        if (!movieQueue) {
+            return res.status(400).json({
+                message: "Movie import is disabled in production",
+            });
+        }
+
         const movies = await fetchTopMoviesFromTMDB();
 
         for (const movie of movies) {
@@ -139,12 +146,14 @@ router.post("/import/imdb", auth, role("admin"), async (req, res) => {
 
         res.json({
             message: "TMDB movies queued for import",
-            total: movies.length
+            total: movies.length,
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
+
 
 
 

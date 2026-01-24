@@ -1,5 +1,12 @@
 const dotenv = require("dotenv");
-require("./src/workers/movie.worker");
+
+if (process.env.USE_REDIS === "true") {
+    require("./workers/movie.worker");
+    console.log("Redis worker started");
+} else {
+    console.log("Redis worker disabled");
+}
+
 dotenv.config();
 
 const connectDB = require("./src/config/database");
