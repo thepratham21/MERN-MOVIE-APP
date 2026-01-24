@@ -6,9 +6,16 @@ const role = localStorage.getItem("role");
 
 export const loginUser = createAsyncThunk(
     "auth/login",
-    async (data) => {
-        const res = await api.post("/auth/login", data);
-        return res.data;
+    async (data, { rejectWithValue }) => {
+        try {
+            const res = await api.post("/auth/login", data);
+            return {
+                token: res.data.token,
+                role: res.data.user.role,
+            };
+        } catch (err) {
+            return rejectWithValue(err.response?.data || "Login failed");
+        }
     }
 );
 
@@ -18,11 +25,13 @@ const authSlice = createSlice({
         token: token || null,
         role: role || null,
         loading: false,
+        error: null,
     },
     reducers: {
         logout: (state) => {
             state.token = null;
             state.role = null;
+            state.error = null;
             localStorage.clear();
         },
     },
@@ -39,8 +48,9 @@ const authSlice = createSlice({
                 localStorage.setItem("token", action.payload.token);
                 localStorage.setItem("role", action.payload.role);
             })
-            .addCase(loginUser.rejected, (state) => {
+            .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload;
             });
     },
 });
