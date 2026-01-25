@@ -29,7 +29,7 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
             }}
         >
             <CardContent sx={{ flexGrow: 1 }}>
-                {/* Title */}
+                
                 <Typography
                     variant="h6"
                     sx={{ fontWeight: 600, mb: 1 }}
@@ -38,7 +38,7 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
                     {movie.title}
                 </Typography>
 
-                {/* Description (clean clamp, not ugly slice) */}
+                
                 <Typography
                     variant="body2"
                     color="text.secondary"
@@ -55,7 +55,7 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
 
                 <Divider sx={{ mb: 1.5 }} />
 
-                {/* Metadata */}
+                
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
                     <Typography variant="subtitle2">
                         ⭐ Rating: <strong>{movie.rating}</strong>
@@ -71,7 +71,7 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
                 </Box>
             </CardContent>
 
-            {/* Admin Actions */}
+            
             {role === "admin" && (
                 <CardActions sx={{ px: 2, pb: 2 }}>
                     <Stack direction="row" spacing={1} width="100%">
