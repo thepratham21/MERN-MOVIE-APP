@@ -33,7 +33,7 @@ function App() {
       />
 
       <Route
-        path="/admin/movies/edit/:id"
+        path="/edit/:id"
         element={
           <ProtectedRoute adminOnly>
             <EditMovie />
