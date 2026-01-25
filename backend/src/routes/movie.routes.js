@@ -93,6 +93,23 @@ router.get("/sorted", async (req, res) => {
     }
 });
 
+// GET single movie by ID (for Edit page)
+router.get("/:id", auth, role("admin"), async (req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id);
+
+        if (!movie) {
+            return res.status(404).json({ message: "Movie not found" });
+        }
+
+        res.json(movie);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+
 // Admin only route ---> to update a movie
 router.put("/:id", auth, role("admin"), async (req, res) => {
     try {
@@ -152,6 +169,8 @@ router.post("/import/imdb", auth, role("admin"), async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+
 
 
 
