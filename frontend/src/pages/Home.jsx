@@ -27,7 +27,7 @@ const Home = () => {
         if (token) {
             fetchMovies(page);
         } else {
-            // 🔥 clear movies on logout
+            
             setMovies([]);
             setTotalPages(1);
             setPage(1);
