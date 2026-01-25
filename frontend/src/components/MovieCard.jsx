@@ -5,6 +5,8 @@ import {
     Typography,
     Button,
     Stack,
+    Divider,
+    Box,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -17,35 +19,64 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                boxShadow: 3,
+                borderRadius: 3,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                "&:hover": {
+                    transform: "translateY(-4px)",
+                    boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
+                },
             }}
         >
             <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" gutterBottom>
+                {/* Title */}
+                <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, mb: 1 }}
+                    gutterBottom
+                >
                     {movie.title}
                 </Typography>
 
-                <Typography variant="body2" color="text.secondary" mb={1}>
-                    {movie.description?.slice(0, 120)}...
+                {/* Description (clean clamp, not ugly slice) */}
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                        mb: 2,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                    }}
+                >
+                    {movie.description}
                 </Typography>
 
-                <Typography variant="subtitle2">
-                    ⭐ Rating: {movie.rating}
-                </Typography>
+                <Divider sx={{ mb: 1.5 }} />
 
-                <Typography variant="subtitle2" color="text.secondary">
-                    📅 Release: {movie.releaseDate}
-                </Typography>
+                {/* Metadata */}
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <Typography variant="subtitle2">
+                        ⭐ Rating: <strong>{movie.rating}</strong>
+                    </Typography>
 
-                <Typography variant="subtitle2" color="text.secondary">
-                    ⏱ Duration: {movie.duration} min
-                </Typography>
+                    <Typography variant="subtitle2" color="text.secondary">
+                        📅 Release: {movie.releaseDate}
+                    </Typography>
+
+                    <Typography variant="subtitle2" color="text.secondary">
+                        ⏱ Duration: {movie.duration} min
+                    </Typography>
+                </Box>
             </CardContent>
 
+            {/* Admin Actions */}
             {role === "admin" && (
-                <CardActions>
-                    <Stack direction="row" spacing={1}>
+                <CardActions sx={{ px: 2, pb: 2 }}>
+                    <Stack direction="row" spacing={1} width="100%">
                         <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={() => onEdit(movie)}
@@ -53,6 +84,7 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
                             Edit
                         </Button>
                         <Button
+                            fullWidth
                             size="small"
                             color="error"
                             variant="outlined"
