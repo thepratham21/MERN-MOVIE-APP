@@ -1,3 +1,4 @@
+
 import {
     Container,
     Grid,
@@ -7,6 +8,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import MovieCard from "../components/MovieCard";
 
@@ -16,6 +18,7 @@ const Home = () => {
     const [totalPages, setTotalPages] = useState(1);
 
     const { role, token } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
 
     const fetchMovies = async (pageNumber = 1) => {
         const res = await api.get(`/movies?page=${pageNumber}`);
@@ -27,15 +30,26 @@ const Home = () => {
         if (token) {
             fetchMovies(page);
         } else {
-            
             setMovies([]);
             setTotalPages(1);
             setPage(1);
         }
     }, [page, token]);
 
-    const handleDelete = (id) => {
-        setMovies((prev) => prev.filter((m) => m._id !== id));
+    
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`/movies/${id}`); 
+            setMovies((prev) => prev.filter((m) => m._id !== id)); 
+        } catch (error) {
+            console.error("Failed to delete movie:", error);
+            alert("Failed to delete movie");
+        }
+    };
+
+    
+    const handleEdit = (movie) => {
+        navigate(`/edit/${movie._id}`);
     };
 
     const importMovies = async () => {
@@ -71,6 +85,7 @@ const Home = () => {
                                 <MovieCard
                                     movie={movie}
                                     onDelete={handleDelete}
+                                    onEdit={handleEdit} 
                                 />
                             </Grid>
                         ))}

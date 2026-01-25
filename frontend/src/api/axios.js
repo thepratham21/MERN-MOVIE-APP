@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
     baseURL: "https://mern-movie-app.up.railway.app/api",
+    
 });
 
 api.interceptors.request.use((config) => {
