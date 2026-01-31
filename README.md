@@ -4,10 +4,6 @@ A full‑stack **MERN Movie Management Application** built as part of a technica
 
 ---
 
-## 🚀 Live Demo
-
-* **(Vercel):** https://mern-movie-app-eight.vercel.app/
-
 
 ---
 
