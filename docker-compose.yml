@@ -2,11 +2,11 @@ version: "3.8"
 
 services:
   frontend:
-    build: ./frontend
+    image: thepratham21/mern-movie-app-frontend:latest
     container_name: frontend
 
   backend:
-    build: ./backend
+    image: thepratham21/mern-movie-app-backend:latest
     container_name: backend
     env_file:
       - ./backend/.env
