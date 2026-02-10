@@ -1,141 +1,205 @@
-# 🎬 MERN Movie Application
+# 🎬 MERN Movie App – End‑to‑End DevOps CI/CD Project
 
-A full‑stack **MERN Movie Management Application** built as part of a technical assessment. The application supports **user authentication, role‑based access control, movie listing with search & pagination, admin CRUD operations**, and **background job processing**.
+A **production‑grade, full‑stack MERN application** built from scratch and deployed using **modern DevOps practices**. This project demonstrates the complete journey — from application development to containerization, automated CI/CD, and cloud deployment on AWS.
+
+> This is **not a tutorial project**. It follows real‑world architecture and deployment patterns used by startups and mid‑scale products.
 
 ---
 
+## 🚀 Project Overview
+
+The MERN Movie App allows users to browse movies, authenticate securely, and provides admin‑level role management. The focus of this project is **DevOps‑first delivery**, ensuring zero‑manual deployment using Jenkins CI/CD and Docker.
+
+**Core Goals:**
+
+* Build a real MERN application
+* Containerize frontend & backend
+* Automate build, test, and deployment
+* Deploy on AWS using Docker + Nginx
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
 ### Frontend
 
-* React.js (Vite)
-* Material UI (MUI)
+* React.js
 * Redux Toolkit
-* React Router DOM
+* Material UI (MUI)
 * Axios
+* Dockerized using Nginx
+* Deployed on **AWS EC2** (via Docker & Docker Compose)**
 
 ### Backend
 
 * Node.js
 * Express.js
 * MongoDB Atlas
-* JWT Authentication
-* Role‑Based Access Control (RBAC)
+* JWT Authentication (Role-based access)
+* Redis + BullMQ (background processing)
+* Dockerized and deployed on **AWS EC2**
 
-### Background Jobs
+### DevOps & Cloud
 
-* Redis
-* BullMQ
-
-> ℹ️ Redis & BullMQ are used only for background movie import jobs and are **disabled in production** after initial data seeding.
+* Docker & Docker Compose
+* Jenkins (CI/CD)
+* Nginx (Reverse Proxy)
+* AWS EC2 (Ubuntu)
+* Docker Hub (Image Registry)
+* GitHub Webhooks
 
 ---
 
-## Features
+## 🧩 System Architecture
 
-### User Features
+### High‑Level Architecture
 
-* User registration & login
+* Frontend and Backend both containerized using Docker
+* Deployed together on AWS EC2 using Docker Compose
+* Nginx acts as a reverse proxy for routing frontend & backend traffic
+* MongoDB hosted on **MongoDB Atlas**
+* Jenkins handles CI/CD automation
+
+**Flow:**
+
+GitHub → Jenkins → Docker Build → Docker Hub → EC2 → Docker Compose → Nginx → Frontend & Backend
+
+---
+
+## 🔐 Authentication & Security
+
 * JWT‑based authentication
-* View movies with pagination
-* Search movies by name or description
-
-### Admin Features
-
-* Add new movies
-* Edit existing movies
-* Delete movies
-* Trigger background movie import (development only)
+* Role‑based access control (Admin/User)
+* Environment variables injected at runtime
+* Secrets stored securely in Jenkins Credentials
+* `.env` files excluded using `.dockerignore`
 
 ---
 
-## 📂 Project Structure
+## 🐳 Dockerization
+
+Both **frontend and backend** are containerized to ensure consistency across development and production environments.
+
+### Backend Dockerfile
+
+* Production-ready Node.js image
+* Optimized dependency installation
+* Environment-based configuration (runtime env vars)
+
+### Frontend Dockerfile
+
+* React app built inside Docker
+* Served using **Nginx** inside the container
+* Optimized static asset delivery
+
+### Docker Compose
+
+* **frontend** service (React + Nginx)
+* **backend** service (Node.js API)
+* **nginx** reverse proxy service
+* Shared Docker network for inter-container communication
+* Port mapping handled only at Nginx level
+* Simple container restarts and updates via `docker-compose up -d`
+
+---
+
+## ⚙️ CI/CD Pipeline (Jenkins)
+
+### Pipeline Stages
+
+1. **Checkout Code** from GitHub
+2. **Build Docker Image**
+3. **Push Image to Docker Hub**
+4. **SSH into AWS EC2**
+5. **Pull Latest Image**
+6. **Restart Containers using Docker Compose**
+
+### Jenkins Features Used
+
+* Declarative Pipeline
+* Docker Hub Credentials
+* SSH Credentials
+* Environment Variables
+* Post‑deployment verification
+
+---
+
+## ☁️ AWS Deployment
+
+* EC2 (Ubuntu) instance
+* Docker & Docker Compose installed
+* Jenkins server configured
+* Nginx exposed on port 80
+* Backend container running on private ports
+
+---
+
+## 📂 Repository Structure
+
+Below is the **complete repository structure**, including **application development files** and **DevOps / deployment-related files** used for production deployment:
 
 ```
-root
-├── backend
-│   ├── config
-│   ├── models
-│   ├── routes
-│   ├── queues
-│   ├── workers
-│   ├── server.js
-│   └── package.json
+MERN-MOVIE-APP
 │
-├── frontend
-│   ├── src
-│   │   ├── api
-│   │   ├── components
-│   │   ├── pages
-│   │   ├── redux
+├── backend/                     # Node.js + Express backend service
+│   ├── config/                  # DB & app configuration
+│   ├── models/                  # Mongoose models
+│   ├── routes/                  # API routes
+│   ├── controllers/             # Business logic
+│   ├── queues/                  # BullMQ queues
+│   ├── workers/                 # Background workers
+│   ├── server.js                # App entry point
+│   ├── package.json
+│   └── Dockerfile               # Backend Docker image
+│
+├── frontend/                    # React frontend application
+│   ├── src/
+│   │   ├── api/                 # API service layer
+│   │   ├── components/          # Reusable UI components
+│   │   ├── pages/               # App pages
+│   │   ├── redux/               # Redux Toolkit store
 │   │   └── App.jsx
-│   └── package.json
+│   ├── nginx.conf               # Nginx config for frontend container
+│   ├── package.json
+│   └── Dockerfile               # Frontend Docker image
 │
-└── README.md
+├── nginx/                       # Reverse proxy configuration
+│   └── nginx.conf               # Routes frontend & backend traffic
+│
+├── docker-compose.yml           # Orchestrates frontend, backend & nginx
+├── Jenkinsfile                  # Jenkins CI/CD pipeline
+├── .dockerignore                # Excludes files from Docker build
+├── .gitignore                   # Git ignored files
+├── README.md                    # Project documentation
+└── screenshots/                 # App, CI/CD & deployment screenshots
 ```
 
----
-
-## 🔐 Authentication & Authorization
-
-* JWT tokens are issued on login
-* Tokens are stored in localStorage
-* Protected backend routes using middleware
-* Admin‑only actions restricted via role checks
+This structure reflects a **real-world production setup**, where application code and DevOps automation coexist in a single repository.
 
 ---
 
-## 🚀 Deployment
+## 🧠 Key Learnings
 
-### Backend
-
-* Deployed on **Railway**
-* Uses MongoDB Atlas for database
-* Redis disabled in production using environment flags
-
-### Frontend
-
-* Deployed on **Vercel**
-* Connected to Railway backend via Axios base URL
+* Writing multistage Dockerfiles
+* Jenkins pipeline automation
+* Secure credential management
+* Cloud deployment strategies
+* Reverse proxy configuration
 
 ---
 
-## 🧪 API Overview
+## 🚀 Future Improvements
 
-* `POST /api/auth/register` – Register user
-* `POST /api/auth/login` – Login user
-* `GET /api/movies` – Get movies (pagination)
-* `POST /api/movies` – Add movie (admin)
-* `PUT /api/movies/:id` – Update movie (admin)
-* `DELETE /api/movies/:id` – Delete movie (admin)
-* `POST /api/movies/import/imdb` – Import movies (admin, dev only)
+* Kubernetes migration (EKS)
+* Prometheus + Grafana monitoring
+* Terraform for infrastructure
 
 ---
 
-## 🧠 Design Decisions
+## 👤 Author
 
-* **Routes‑only backend structure** for simplicity
-* **Redux Toolkit** chosen for predictable state management
-* **Redis made optional** to avoid production dependency after seeding
-* **Environment‑based configuration** for clean deployment
+**Prathmesh Shinde**
 
 ---
 
-## 👨‍💻 Author
-
-Prathmesh Shinde
-
----
-
-## 📌 Notes
-
-* Admin accounts are assigned via backend logic or database role update
-* Import feature is intentionally disabled in production
-* UI kept clean and functional for assessment clarity
-
----
-
-✅ *Project is fully functional and production‑deployed.*
+⭐ If you found this project helpful, consider starring the repository!

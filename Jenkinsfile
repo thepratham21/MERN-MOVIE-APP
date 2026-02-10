@@ -78,11 +78,10 @@ pipeline {
             steps {
                 script {
                     sh """
-                    # Push Backend
+                    
                     docker push ${DOCKER_BACKEND_IMAGE}:latest
                     docker push ${DOCKER_BACKEND_IMAGE}:${GIT_SHA}
 
-                    # Push Frontend
                     docker push ${DOCKER_FRONTEND_IMAGE}:latest
                     docker push ${DOCKER_FRONTEND_IMAGE}:${GIT_SHA}
                     """
