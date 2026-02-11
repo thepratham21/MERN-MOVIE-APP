@@ -1,14 +1,12 @@
-# 🎬 MERN Movie App – End‑to‑End DevOps CI/CD Project
+# 🎬 MERN Movie App – Development to Deployment
 
-A **production‑grade, full‑stack MERN application** built from scratch and deployed using **modern DevOps practices**. This project demonstrates the complete journey — from application development to containerization, automated CI/CD, and cloud deployment on AWS.
-
-> This is **not a tutorial project**. It follows real‑world architecture and deployment patterns used by startups and mid‑scale products.
+A **full‑stack MERN application** built from scratch and deployed using **DevOps practices**. This project demonstrates the complete journey — from application development to containerization, automated CI/CD, and cloud deployment on AWS.
 
 ---
 
-## 🚀 Project Overview
+## > Project Overview
 
-The MERN Movie App allows users to browse movies, authenticate securely, and provides admin‑level role management. The focus of this project is **DevOps‑first delivery**, ensuring zero‑manual deployment using Jenkins CI/CD and Docker.
+The MERN Movie App allows users to browse movies, authenticate securely, and provides admin‑level role management, ensuring zero‑manual deployment using Jenkins CI/CD and Docker.
 
 **Core Goals:**
 
@@ -50,9 +48,7 @@ The MERN Movie App allows users to browse movies, authenticate securely, and pro
 
 ---
 
-## 🧩 System Architecture
-
-### High‑Level Architecture
+## - System Architecture
 
 * Frontend and Backend both containerized using Docker
 * Deployed together on AWS EC2 using Docker Compose
@@ -64,7 +60,12 @@ The MERN Movie App allows users to browse movies, authenticate securely, and pro
 
 GitHub → Jenkins → Docker Build → Docker Hub → EC2 → Docker Compose → Nginx → Frontend & Backend
 
+#### - Architecture Diagram
+
+![Architecture Diagram](screenshots/Architecture.png)
+
 ---
+
 
 ## 🔐 Authentication & Security
 
@@ -101,6 +102,9 @@ Both **frontend and backend** are containerized to ensure consistency across dev
 * Port mapping handled only at Nginx level
 * Simple container restarts and updates via `docker-compose up -d`
 
+#### - Containers running
+![Container running](screenshots/containers.png)
+
 ---
 
 ## ⚙️ CI/CD Pipeline (Jenkins)
@@ -122,6 +126,9 @@ Both **frontend and backend** are containerized to ensure consistency across dev
 * Environment Variables
 * Post‑deployment verification
 
+#### - Pipeline run successfully
+![Jenkins Pipeline](screenshots/cicd.png)
+
 ---
 
 ## ☁️ AWS Deployment
@@ -132,6 +139,16 @@ Both **frontend and backend** are containerized to ensure consistency across dev
 * Nginx exposed on port 80
 * Backend container running on private ports
 
+
+![](screenshots/AWS.png)
+
+#### - Containers running on EC2
+![Deployed on EC2 using docker compose](screenshots/AWS2.png)
+
+#### - MERN MOVIE APP is live on EC2
+![App running on EC2](screenshots/UI1.png)
+
+![App running on EC2](screenshots/UI2.png)
 ---
 
 ## 📂 Repository Structure
@@ -174,7 +191,7 @@ MERN-MOVIE-APP
 └── screenshots/                 # App, CI/CD & deployment screenshots
 ```
 
-This structure reflects a **real-world production setup**, where application code and DevOps automation coexist in a single repository.
+
 
 ---
 
@@ -188,13 +205,6 @@ This structure reflects a **real-world production setup**, where application cod
 
 ---
 
-## 🚀 Future Improvements
-
-* Kubernetes migration (EKS)
-* Prometheus + Grafana monitoring
-* Terraform for infrastructure
-
----
 
 ## 👤 Author
 
